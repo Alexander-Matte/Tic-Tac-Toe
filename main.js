@@ -4,6 +4,11 @@ const playerFactory = (name,id,mark) => {
 };
 
 const gameModule = (function(){
+    const selectors = {
+        boardDiv: () => document.querySelector("#board"),
+
+    }
+
     //logic to check that after a move, if the game is over
     const checkGameOver = () => console.log("game over");
     //gameboard logic
@@ -14,10 +19,13 @@ const gameModule = (function(){
 
     }
     
-    //this will initialize and update the UI board
-    const displayController = {};
-    //controlls flow of game and keeps track of game data such as whos move
+    //controlls flow of game and keeps track of game data such as whos turn it is.
     const gameController = {};
+
+    //this will initialize and update the UI board. No logic should come in here.
+    const displayController = {};
+
+    return {selectors}
 
 })();
 
