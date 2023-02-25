@@ -29,8 +29,7 @@ const gameModule = (function(){
     //controlls flow of game and keeps track of game data such as whos turn it is.
     const gameController = {
         isOTurn: false,
-        currentTurn: this.isOTurn ? "o" : "x",
-
+        currentTurn: () => gameController.isOTurn ? "O" : "X",
     };
 
     //this will initialize and update the UI board. No game logic should come in here.
@@ -40,11 +39,13 @@ const gameModule = (function(){
 
     };
 
-    let handleClick = (e) => {
+    let handleClick = (cell) => {
         // add the current players mark.
+        cell.target.innerHTML = gameController.currentTurn()
         //Check if the game is won
         //Check if game is a draw
         //change turns
+        changeTurns();
         
     }
     
@@ -63,7 +64,8 @@ const gameModule = (function(){
     const checkForDraw = () => console.log("tie");
 
     //logic to check that after a move, if the game is won
-    const changeTurns = () => console.log("Changing player");
+    const changeTurns = () => gameController.isOTurn ? gameController.isOTurn = false : gameController.isOTurn = true;
+    
 
  
 
