@@ -74,23 +74,23 @@ const gameModule = (function(){
 
 
     
-    //logic to check that after a move, if the game is won
+    // checks for full row of "X's" or "O's" depending on whose turn it is
     const checkForWin = (arr) => {
-        return arr.every(isMarkerInCell);
+        return arr.every(isMarkInCell);
     };
 
-    //logic to check that after a move, if the game is won
+    //logic to check that after a move, if the game tied
     const checkForDraw = () => console.log("tie");
 
-    //logic to check that after a move, if the game is won
+    //changes turn
     const changeTurns = () => gameController.isOTurn ? gameController.isOTurn = false : gameController.isOTurn = true;
 
     //place marker in cell
     const placeMarker = (currentTurn, cell) => {
         cell.target.innerHTML = currentTurn;
     }
-
-    const isMarkerInCell = (currentValue) => cellsArray[currentValue].innerHTML === gameController.currentTurn() ? true : false ;
+    //checks if specific cell has the current players marker 
+    const isMarkInCell = (currentValue) => cellsArray[currentValue].innerHTML === gameController.currentTurn() ? true : false ;
 
 
     
