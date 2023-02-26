@@ -6,13 +6,12 @@ const playerFactory = (name,id,mark) => {
 const gameModule = (function(){
         const boardDiv = document.querySelector("#board");
         const cellsArray = Array.from(document.querySelectorAll(".cell"));
+        const resetButton = document.querySelector("#reset");
 
 
 
     //gameboard logic
     const gameBoard = {
-        player1: playerFactory("Alex", 1, "x"),
-        player2: playerFactory("Madi", 2, "o"),
         winningCombos: [
             [0,1,2],
             [3,4,5],
@@ -23,22 +22,36 @@ const gameModule = (function(){
             [0,4,8],
             [2,4,6],
         ]
-
     }
     
     //controlls flow of game and keeps track of game data such as whos turn it is.
     const gameController = {
+        player1: playerFactory("Alex", 1, "X"),
+        player2: playerFactory("Madi", 2, "O"),
         isOTurn: false,
         currentTurn: () => gameController.isOTurn ? "O" : "X",
     };
 
     //this will initialize and update the UI board. No game logic should come in here.
     const displayController = {
-        
-
-
+        resetBoard: () => cellsArray.forEach(cell => {
+            cell.innerHTML = ""
+            cell.removeEventListener("click", handleClick, {once: true});
+            cell.addEventListener("click", handleClick, {once: true});
+            console.clear()
+        }),
+        init: () => {
+            cellsArray.forEach(cell => {
+                cell.addEventListener("click", handleClick, {once: true});
+            })
+            resetButton.addEventListener("click", () => displayController.resetBoard());
+        }
     };
 
+    // Logic functions begin here
+
+
+    // handles what happens on every click of a cell
     let handleClick = (cell) => {
         // add the current players mark.
         placeMarker(gameController.currentTurn(), cell);
@@ -55,21 +68,10 @@ const gameModule = (function(){
         //Check if game is a draw
         checkForDraw(cellsArray);
         // loop through whole cells array and if every cell has a mark, but checkForWin is not true, then console.log DRAW
-
-
         //change turns
         changeTurns();
         
     }
-    
-    
-    cellsArray.forEach(cell => {
-        cell.addEventListener("click", handleClick, {once: true});
-    })
-
-
-
-
     
     // checks for full row of "X's" or "O's" depending on whose turn it is
     const checkForWin = (arr) => {
@@ -90,6 +92,7 @@ const gameModule = (function(){
     }
     //checks if specific cell has the current players marker 
     const isCurrentMarkInCell = (currentValue) => cellsArray[currentValue].innerHTML === gameController.currentTurn() ? true : false ;
+    
     // Checks if every space on board has a mark and returns true if board is full and false if not every space is occupied
     const isOccupied = (currentValue) => currentValue.innerHTML === "" ? false : true;
     
@@ -99,15 +102,10 @@ const gameModule = (function(){
 
     
     
-    
-
+    displayController.init();
 
 })();
 
-
-
-
-// TODO: Figure out how to check board if the same marker is in the positions stated in winning array
 
 
 
