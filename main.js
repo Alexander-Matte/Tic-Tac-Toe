@@ -41,11 +41,20 @@ const gameModule = (function(){
 
     let handleClick = (cell) => {
         // add the current players mark.
-        cell.target.innerHTML = gameController.currentTurn()
+        placeMarker(gameController.currentTurn(), cell);
         //Check if the game is won
+
+        console.log(checkForWin(gameBoard.winningCombos[0]));
+
+
+        
+        
+
+
+
         //Check if game is a draw
         //change turns
-        changeTurns();
+        changeTurns(gameBoard.winningCombos[0]);
         
     }
     
@@ -54,25 +63,38 @@ const gameModule = (function(){
         cell.addEventListener("click", handleClick, {once: true});
     })
 
+
     
-
-
     //logic to check that after a move, if the game is won
-    const checkForWin = () => console.log("game over");
+    const checkForWin = (arr) => {
+        return arr.every(isMarkerInCell);
+    };
 
     //logic to check that after a move, if the game is won
     const checkForDraw = () => console.log("tie");
 
     //logic to check that after a move, if the game is won
     const changeTurns = () => gameController.isOTurn ? gameController.isOTurn = false : gameController.isOTurn = true;
+
+    //place marker in cell
+    const placeMarker = (currentTurn, cell) => {
+        cell.target.innerHTML = currentTurn;
+    }
+
+    const isMarkerInCell = (currentValue) => cellsArray[currentValue].innerHTML === gameController.currentTurn() ? true : false ;
+
     
 
- 
+    
+    
+
 
 })();
 
 
 
+
+// TODO: Figure out how to check board if the same marker is in the positions stated in winning array
 
 
 

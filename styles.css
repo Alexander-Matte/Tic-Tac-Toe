@@ -8,8 +8,8 @@ body {
     display: grid;
     gap: 1px;
     grid-template-columns: repeat(3, 1fr);
-    width: 350px;
-    height: 350px;
+    width: 400px;
+    height: 400px;
 
 }
 
