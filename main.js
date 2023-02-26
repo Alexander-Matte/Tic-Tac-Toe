@@ -44,17 +44,24 @@ const gameModule = (function(){
         placeMarker(gameController.currentTurn(), cell);
         //Check if the game is won
 
-        console.log(checkForWin(gameBoard.winningCombos[0]));
+        gameBoard.winningCombos.forEach(arr => {
+            if (checkForWin(arr)) {
+                console.log("GAME WON!")
+                cellsArray.forEach (cell => {
+                    cell.removeEventListener("click", handleClick, {once: true});
+                })
+                return
+            } 
+        })
 
 
-        
-        
+
 
 
 
         //Check if game is a draw
         //change turns
-        changeTurns(gameBoard.winningCombos[0]);
+        changeTurns();
         
     }
     
@@ -62,6 +69,8 @@ const gameModule = (function(){
     cellsArray.forEach(cell => {
         cell.addEventListener("click", handleClick, {once: true});
     })
+
+
 
 
     
@@ -83,8 +92,10 @@ const gameModule = (function(){
 
     const isMarkerInCell = (currentValue) => cellsArray[currentValue].innerHTML === gameController.currentTurn() ? true : false ;
 
+
     
 
+    
     
     
 
