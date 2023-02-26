@@ -1,13 +1,12 @@
 //factory function to create players
-const playerFactory = (name,id,mark) => {
-    return {name, id, mark}
+const playerFactory = (name, mark) => {
+    return {name,mark}
 };
 
 const gameModule = (function(){
-        const boardDiv = document.querySelector("#board");
-        const cellsArray = Array.from(document.querySelectorAll(".cell"));
-        const resetButton = document.querySelector("#reset");
-
+    const boardDiv = document.querySelector("#board");
+    const cellsArray = Array.from(document.querySelectorAll(".cell"));
+    const resetButton = document.querySelector("#reset");
 
 
     //gameboard logic
@@ -26,10 +25,13 @@ const gameModule = (function(){
     
     //controlls flow of game and keeps track of game data such as whos turn it is.
     const gameController = {
-        player1: playerFactory("Alex", 1, "X"),
-        player2: playerFactory("Madi", 2, "O"),
+        player1: playerFactory("Player One","X"),
+        player2: playerFactory("Player Two","O"),
         isOTurn: false,
         currentTurn: () => gameController.isOTurn ? "O" : "X",
+        gameWinner: null,
+
+
     };
 
     //this will initialize and update the UI board. No game logic should come in here.
@@ -38,6 +40,7 @@ const gameModule = (function(){
             cell.innerHTML = ""
             cell.removeEventListener("click", handleClick, {once: true});
             cell.addEventListener("click", handleClick, {once: true});
+            gameController.gameWinner = null;
             console.clear()
         }),
         init: () => {
@@ -46,6 +49,7 @@ const gameModule = (function(){
             })
             resetButton.addEventListener("click", () => displayController.resetBoard());
         }
+
     };
 
     // Logic functions begin here
@@ -53,23 +57,32 @@ const gameModule = (function(){
 
     // handles what happens on every click of a cell
     let handleClick = (cell) => {
+        let foundWinner = false;
         // add the current players mark.
         placeMarker(gameController.currentTurn(), cell);
         //Check if the game is won
+        
         gameBoard.winningCombos.forEach(arr => {
+            
             if (checkForWin(arr)) {
-                console.log("GAME WON!")
                 cellsArray.forEach (cell => {
                     cell.removeEventListener("click", handleClick, {once: true});
                 })
+                foundWinner = true;
+                findWinningPlayer(gameController.currentTurn());
+                console.log(`${gameController.gameWinner.name} has won this round!`)
                 return
             }
+            return
         })
+
+        //if no winner is found then
+        if(!foundWinner) {
         //Check if game is a draw
         checkForDraw(cellsArray);
-        // loop through whole cells array and if every cell has a mark, but checkForWin is not true, then console.log DRAW
         //change turns
         changeTurns();
+        }
         
     }
     
@@ -95,13 +108,11 @@ const gameModule = (function(){
     
     // Checks if every space on board has a mark and returns true if board is full and false if not every space is occupied
     const isOccupied = (currentValue) => currentValue.innerHTML === "" ? false : true;
+
+    // finds the winning player based on current turn when the game was won
+    const findWinningPlayer = (currentTurn) => currentTurn === "X" ? gameController.gameWinner = gameController.player1 : gameController.gameWinner = gameController.player2;
     
 
-
-    
-
-    
-    
     displayController.init();
 
 })();
