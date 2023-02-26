@@ -43,7 +43,6 @@ const gameModule = (function(){
         // add the current players mark.
         placeMarker(gameController.currentTurn(), cell);
         //Check if the game is won
-
         gameBoard.winningCombos.forEach(arr => {
             if (checkForWin(arr)) {
                 console.log("GAME WON!")
@@ -51,15 +50,13 @@ const gameModule = (function(){
                     cell.removeEventListener("click", handleClick, {once: true});
                 })
                 return
-            } 
+            }
         })
-
-
-
-
-
-
         //Check if game is a draw
+        checkForDraw(cellsArray);
+        // loop through whole cells array and if every cell has a mark, but checkForWin is not true, then console.log DRAW
+
+
         //change turns
         changeTurns();
         
@@ -76,11 +73,13 @@ const gameModule = (function(){
     
     // checks for full row of "X's" or "O's" depending on whose turn it is
     const checkForWin = (arr) => {
-        return arr.every(isMarkInCell);
+        return arr.every(isCurrentMarkInCell);
     };
 
     //logic to check that after a move, if the game tied
-    const checkForDraw = () => console.log("tie");
+    const checkForDraw = (arr) => {
+        cellsArray.every(isOccupied) ? console.log("DRAW"): false;
+    }
 
     //changes turn
     const changeTurns = () => gameController.isOTurn ? gameController.isOTurn = false : gameController.isOTurn = true;
@@ -90,7 +89,10 @@ const gameModule = (function(){
         cell.target.innerHTML = currentTurn;
     }
     //checks if specific cell has the current players marker 
-    const isMarkInCell = (currentValue) => cellsArray[currentValue].innerHTML === gameController.currentTurn() ? true : false ;
+    const isCurrentMarkInCell = (currentValue) => cellsArray[currentValue].innerHTML === gameController.currentTurn() ? true : false ;
+    // Checks if every space on board has a mark and returns true if board is full and false if not every space is occupied
+    const isOccupied = (currentValue) => currentValue.innerHTML === "" ? false : true;
+    
 
 
     
