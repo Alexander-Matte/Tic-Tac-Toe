@@ -7,6 +7,9 @@ const gameModule = (function(){
     const boardDiv = document.querySelector("#board");
     const cellsArray = Array.from(document.querySelectorAll(".cell"));
     const resetButton = document.querySelector("#reset");
+    const p1WinMessage = document.querySelector("#winning-message-p1");
+    const p2WinMessage = document.querySelector("#winning-message-p2");
+
 
 
     //gameboard logic
@@ -48,7 +51,8 @@ const gameModule = (function(){
                 cell.addEventListener("click", handleClick, {once: true});
             })
             resetButton.addEventListener("click", () => displayController.resetBoard());
-        }
+        },
+        winningMessage: `<div>Winner: ${gameController.gameWinner}!</div>`,
 
     };
 
@@ -70,7 +74,9 @@ const gameModule = (function(){
                 })
                 foundWinner = true;
                 findWinningPlayer(gameController.currentTurn());
-                console.log(`${gameController.gameWinner.name} has won this round!`)
+                console.log(gameController.gameWinner);
+                //ERROR IS HERE
+                gameController.gameWinner === gameController.player1.name ? p1WinMessage.innerHTML = gameController.winningMessage : p2WinMessage.innerHTML = gameController.winningMessage;
                 return
             }
             return
@@ -110,7 +116,7 @@ const gameModule = (function(){
     const isOccupied = (currentValue) => currentValue.innerHTML === "" ? false : true;
 
     // finds the winning player based on current turn when the game was won
-    const findWinningPlayer = (currentTurn) => currentTurn === "X" ? gameController.gameWinner = gameController.player1 : gameController.gameWinner = gameController.player2;
+    const findWinningPlayer = (currentTurn) => currentTurn === "X" ? gameController.gameWinner = gameController.player1.name : gameController.gameWinner = gameController.player2.name;
     
 
     displayController.init();

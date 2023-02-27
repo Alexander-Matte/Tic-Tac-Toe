@@ -90,3 +90,10 @@ h1 {
 #reset:focus:not(:active) {
   box-shadow: rgba(40, 170, 255, 0.25) 0 0 0 .125em;
 }
+
+
+#winning-message-p1 {
+    height: 100%;
+    width: 100%;
+
+}
