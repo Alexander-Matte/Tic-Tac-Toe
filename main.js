@@ -12,6 +12,10 @@ const gameModule = (function(){
 
 
 
+
+
+
+
     //gameboard logic
     const gameBoard = {
         winningCombos: [
@@ -43,6 +47,7 @@ const gameModule = (function(){
             cell.innerHTML = ""
             cell.removeEventListener("click", handleClick, {once: true});
             cell.addEventListener("click", handleClick, {once: true});
+            removeWinMsg();
             gameController.gameWinner = null;
             console.clear()
         }),
@@ -52,9 +57,9 @@ const gameModule = (function(){
             })
             resetButton.addEventListener("click", () => displayController.resetBoard());
         },
-        winningMessage: `<div>Winner: ${gameController.gameWinner}!</div>`,
 
     };
+
 
     // Logic functions begin here
 
@@ -73,10 +78,8 @@ const gameModule = (function(){
                     cell.removeEventListener("click", handleClick, {once: true});
                 })
                 foundWinner = true;
-                findWinningPlayer(gameController.currentTurn());
-                console.log(gameController.gameWinner);
-                //ERROR IS HERE
-                gameController.gameWinner === gameController.player1.name ? p1WinMessage.innerHTML = gameController.winningMessage : p2WinMessage.innerHTML = gameController.winningMessage;
+                updateWinningPlayer(gameController.currentTurn());
+                insertWinMsg(gameController.gameWinner);
                 return
             }
             return
@@ -116,7 +119,21 @@ const gameModule = (function(){
     const isOccupied = (currentValue) => currentValue.innerHTML === "" ? false : true;
 
     // finds the winning player based on current turn when the game was won
-    const findWinningPlayer = (currentTurn) => currentTurn === "X" ? gameController.gameWinner = gameController.player1.name : gameController.gameWinner = gameController.player2.name;
+    const updateWinningPlayer = (currentTurn) => currentTurn === "X" ? gameController.gameWinner = gameController.player1.name : gameController.gameWinner = gameController.player2.name;
+
+    //inserts winning message based on who won
+    const insertWinMsg = (gameWinner) => {
+        let winElement = `<div class="winning-message">Winner: ${gameWinner}!</div>`;
+        gameWinner === "Player One" ? p1WinMessage.innerHTML = winElement : p2WinMessage.innerHTML = winElement;
+    }
+
+    //removes winning message if its on the screen
+    const removeWinMsg = () => {
+        ElToRemove = document.querySelector(".winning-message");
+        ElToRemove ? ElToRemove.remove() : false; 
+        
+        
+    }
     
 
     displayController.init();

@@ -92,8 +92,9 @@ h1 {
 }
 
 
-#winning-message-p1 {
-    height: 100%;
-    width: 100%;
-
+.winning-message {
+    display: flex;
+    justify-content: center;
+    margin-top: 15%;
+    color: #00CFFF;
 }
