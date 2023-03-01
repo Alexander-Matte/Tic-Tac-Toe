@@ -1,20 +1,16 @@
 //factory function to create players
-const playerFactory = (name, mark) => {
-    return {name,mark}
+const playerFactory = (name, mark, score) => {
+    return {name,mark, score}
 };
 
 const gameModule = (function(){
     const boardDiv = document.querySelector("#board");
     const cellsArray = Array.from(document.querySelectorAll(".cell"));
     const resetButton = document.querySelector("#reset");
-    const p1WinMessage = document.querySelector("#winning-message-p1");
-    const p2WinMessage = document.querySelector("#winning-message-p2");
-
-
-
-
-
-
+    const ticTacToe = document.querySelector("#tic-tac-toe");
+    const p1Score = document.querySelector("#p1-score");
+    const p2Score = document.querySelector("#p2-score");
+    const markerDiv = document.createElement("div");
 
     //gameboard logic
     const gameBoard = {
@@ -32,8 +28,8 @@ const gameModule = (function(){
     
     //controlls flow of game and keeps track of game data such as whos turn it is.
     const gameController = {
-        player1: playerFactory("Player One","X"),
-        player2: playerFactory("Player Two","O"),
+        player1: playerFactory("Player One","X", 0),
+        player2: playerFactory("Player Two","O", 0),
         isOTurn: false,
         currentTurn: () => gameController.isOTurn ? "O" : "X",
         gameWinner: null,
@@ -47,9 +43,9 @@ const gameModule = (function(){
             cell.innerHTML = ""
             cell.removeEventListener("click", handleClick, {once: true});
             cell.addEventListener("click", handleClick, {once: true});
-            removeWinMsg();
             gameController.gameWinner = null;
-            console.clear()
+            ticTacToe.innerHTML = "Tic-Tac-Toe";
+            removeWinEffect(cell);
         }),
         init: () => {
             cellsArray.forEach(cell => {
@@ -58,10 +54,15 @@ const gameModule = (function(){
             resetButton.addEventListener("click", () => displayController.resetBoard());
         },
 
+        displayScore: () => {
+                p1Score.innerHTML = gameController.player1.score;
+                p2Score.innerHTML = gameController.player2.score;
+        }
+
     };
 
 
-    // Logic functions begin here
+    // ------------------------------------------------------- Logic functions begin here -------------------------------------------------------
 
 
     // handles what happens on every click of a cell
@@ -74,12 +75,16 @@ const gameModule = (function(){
         gameBoard.winningCombos.forEach(arr => {
             
             if (checkForWin(arr)) {
+                addWinEffect(arr);
                 cellsArray.forEach (cell => {
                     cell.removeEventListener("click", handleClick, {once: true});
                 })
                 foundWinner = true;
                 updateWinningPlayer(gameController.currentTurn());
                 insertWinMsg(gameController.gameWinner);
+                updateWinnerScore(gameController.gameWinner);
+                displayController.displayScore();
+                changeTurns()
                 return
             }
             return
@@ -101,9 +106,10 @@ const gameModule = (function(){
     };
 
     //logic to check that after a move, if the game tied
-    const checkForDraw = (arr) => {
-        cellsArray.every(isOccupied) ? console.log("DRAW"): false;
-    }
+    const checkForDraw = () => cellsArray.every(isOccupied) ? ticTacToe.innerHTML = "DRAW!" : false;
+
+
+        
 
     //changes turn
     const changeTurns = () => gameController.isOTurn ? gameController.isOTurn = false : gameController.isOTurn = true;
@@ -119,22 +125,28 @@ const gameModule = (function(){
     const isOccupied = (currentValue) => currentValue.innerHTML === "" ? false : true;
 
     // finds the winning player based on current turn when the game was won
-    const updateWinningPlayer = (currentTurn) => currentTurn === "X" ? gameController.gameWinner = gameController.player1.name : gameController.gameWinner = gameController.player2.name;
+    const updateWinningPlayer = (currentTurn) => currentTurn === "X" ? gameController.gameWinner = gameController.player1 : gameController.gameWinner = gameController.player2;
 
     //inserts winning message based on who won
-    const insertWinMsg = (gameWinner) => {
-        let winElement = `<div class="winning-message">Winner: ${gameWinner}!</div>`;
-        gameWinner === "Player One" ? p1WinMessage.innerHTML = winElement : p2WinMessage.innerHTML = winElement;
+    const insertWinMsg = (winner) => {
+        ticTacToe.innerHTML = `${winner.name} Wins!`
     }
 
-    //removes winning message if its on the screen
-    const removeWinMsg = () => {
-        ElToRemove = document.querySelector(".winning-message");
-        ElToRemove ? ElToRemove.remove() : false; 
-        
-        
+    const updateWinnerScore = (winner) => winner.name === "Player One" ? gameController.player1.score++ : gameController.player2.score++;
+
+    const addWinEffect = (array) => {
+        array.forEach(index => {
+            let winningCell = cellsArray[index];
+            winningCell.classList.add("green")
+        })
+
+    };
+
+    const removeWinEffect = (cell) => {
+            cell.classList.contains("green") ? cell.classList.remove("green") : false;
     }
     
+
 
     displayController.init();
 

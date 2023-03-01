@@ -9,10 +9,27 @@
 
 }
 
-.pannel:nth-child(odd) {
+.pannel {
     background-color: #000000;
+}
+
+.pannel:nth-child(odd) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30%;
+    color: #00CFFF;
+    font-size: 30px;
 
 }
+
+.pannel:nth-child(odd) :nth-child(2) {
+    font-size: 100px;
+    text-decoration: none !important;
+    
+}
+
+
 
 .pannel:nth-child(2) {
     background-color: #000000;
@@ -92,9 +109,22 @@ h1 {
 }
 
 
-.winning-message {
-    display: flex;
-    justify-content: center;
-    margin-top: 15%;
+.green {
+    color: green;
+    animation-name: grow;
+    animation-iteration-count: infinite;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+
+}
+
+@keyframes grow {
+    0% { font-size: 16px; }
+    50% { font-size: 30px; }
+    100% { font-size: 16px; }
+}
+
+#current-turn {
     color: #00CFFF;
 }
+
