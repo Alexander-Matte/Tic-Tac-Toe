@@ -10,7 +10,7 @@ const gameModule = (function(){
     const ticTacToe = document.querySelector("#tic-tac-toe");
     const p1Score = document.querySelector("#p1-score");
     const p2Score = document.querySelector("#p2-score");
-    const markerDiv = document.createElement("div");
+    const currentTurnDisplay = document.querySelector("#current-turn")
 
     //gameboard logic
     const gameBoard = {
@@ -39,19 +39,28 @@ const gameModule = (function(){
 
     //this will initialize and update the UI board. No game logic should come in here.
     const displayController = {
-        resetBoard: () => cellsArray.forEach(cell => {
-            cell.innerHTML = ""
-            cell.removeEventListener("click", handleClick, {once: true});
-            cell.addEventListener("click", handleClick, {once: true});
-            gameController.gameWinner = null;
-            ticTacToe.innerHTML = "Tic-Tac-Toe";
-            removeWinEffect(cell);
-        }),
+        resetBoard: () => {
+            cellsArray.forEach(cell => {
+                cell.innerHTML = ""
+                cell.removeEventListener("click", handleClick, {once: true});
+                cell.addEventListener("click", handleClick, {once: true});
+                removeWinEffect(cell);
+            })
+
+            displayController.init();
+        },
+
         init: () => {
             cellsArray.forEach(cell => {
                 cell.addEventListener("click", handleClick, {once: true});
             })
+            ticTacToe.innerHTML = "Tic-Tac-Toe";
+            gameController.gameWinner = null;
+            gameController.isOTurn = false;
+            currentTurnDisplay.innerHTML = `CURRENT TURN: ${gameController.currentTurn()}'s!`;
             resetButton.addEventListener("click", () => displayController.resetBoard());
+
+
         },
 
         displayScore: () => {
@@ -71,7 +80,6 @@ const gameModule = (function(){
         // add the current players mark.
         placeMarker(gameController.currentTurn(), cell);
         //Check if the game is won
-        
         gameBoard.winningCombos.forEach(arr => {
             
             if (checkForWin(arr)) {
@@ -96,6 +104,7 @@ const gameModule = (function(){
         checkForDraw(cellsArray);
         //change turns
         changeTurns();
+        currentTurnDisplay.innerHTML = `CURRENT TURN: ${gameController.currentTurn()}'s!`;
         }
         
     }
@@ -151,9 +160,6 @@ const gameModule = (function(){
     displayController.init();
 
 })();
-
-
-
 
 
 
