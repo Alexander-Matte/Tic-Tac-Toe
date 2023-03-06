@@ -43,6 +43,10 @@
     
 }
 
+.team {
+    text-align: center;
+}
+
 h1 {
     color: #00CFFF;
 }
@@ -128,7 +132,7 @@ h1 {
 }
 
 #current-turn {
-    color: #00CFFF;
+    color: green;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 

@@ -59,8 +59,6 @@ const gameModule = (function(){
             gameController.isOTurn = false;
             currentTurnDisplay.innerHTML = `CURRENT TURN: ${gameController.currentTurn()}'s!`;
             resetButton.addEventListener("click", () => displayController.resetBoard());
-
-
         },
 
         displayScore: () => {
@@ -104,6 +102,7 @@ const gameModule = (function(){
         checkForDraw(cellsArray);
         //change turns
         changeTurns();
+        //Shows who's turn it is currently
         currentTurnDisplay.innerHTML = `CURRENT TURN: ${gameController.currentTurn()}'s!`;
         }
         
@@ -116,9 +115,6 @@ const gameModule = (function(){
 
     //logic to check that after a move, if the game tied
     const checkForDraw = () => cellsArray.every(isOccupied) ? ticTacToe.innerHTML = "DRAW!" : false;
-
-
-        
 
     //changes turn
     const changeTurns = () => gameController.isOTurn ? gameController.isOTurn = false : gameController.isOTurn = true;
@@ -148,15 +144,12 @@ const gameModule = (function(){
             let winningCell = cellsArray[index];
             winningCell.classList.add("green")
         })
-
     };
 
     const removeWinEffect = (cell) => {
-            cell.classList.contains("green") ? cell.classList.remove("green") : false;
+        cell.classList.contains("green") ? cell.classList.remove("green") : false;
     }
     
-
-
     displayController.init();
 
 })();
